@@ -29,11 +29,12 @@ public class Main {
 
 		SparkConf conf = new SparkConf();
 		conf.setAppName("HWSpark");
+//		conf.setMaster("yarn-cluster");
 
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		JavaRDD<String> file = sc.textFile(args[0]);
 
-		// TODO:map
+		// TODO:使用map找出測試資料所有英文字母，並存至/spark/homework/map
 		JavaRDD<String> map = file.map(new Function<String, String>() {
 
 			public String call(String arg0) throws Exception {
@@ -43,7 +44,7 @@ public class Main {
 
 		map.saveAsTextFile("/spark/homework/map");
 
-		// TODO:flatMap
+		// TODO:使用flatmap找出測試資料所有以”,”切割的資料，並存至/spark/homework/flatMap
 		JavaRDD<String> flatmap = file
 				.flatMap(new FlatMapFunction<String, String>() {
 
@@ -54,7 +55,7 @@ public class Main {
 
 		flatmap.saveAsTextFile("/spark/homework/flatMap");
 
-		// TODO:filter
+		// TODO:使用filter找出測試資料所有以123與456的資料，並存至/spark/homework/filter
 		JavaRDD<String> filter = flatmap
 				.filter(new Function<String, Boolean>() {
 
@@ -68,7 +69,7 @@ public class Main {
 
 		filter.saveAsTextFile("/spark/homework/filter");
 
-		// TODO:mapToPair
+		// TODO:使用mapToPair將測試資料轉換成(str, 1)，並存至/spark/homework/mapPair
 		JavaPairRDD<String, Integer> mapToPair = flatmap
 				.mapToPair(new PairFunction<String, String, Integer>() {
 
@@ -80,7 +81,7 @@ public class Main {
 
 		mapToPair.saveAsTextFile("/spark/homework/mapPair");
 
-		// TODO:flatMapToPair
+		// TODO:使用flatMapToPair將測試資料轉換成(字母, 所有後面數字的sum)，並存至/spark/homework/filter_output
 		JavaPairRDD<String, Integer> flatMapToPair = file
 				.flatMapToPair(new PairFlatMapFunction<String, String, Integer>() {
 
@@ -102,7 +103,7 @@ public class Main {
 
 		flatMapToPair.saveAsTextFile("/spark/homework/filter_output");
 
-		// TODO:groupBy (for迴圈會遇到特殊邏輯，碰到一次return即會當作結束)
+		// TODO:使用groupBy找出測試資料中大於500的資料，若無法辨識分到”None”，並存至/spark/homework/groupBy (for迴圈會遇到特殊邏輯，碰到一次return即會當作結束)
 		JavaPairRDD<String, Iterable<String>> groupBy = flatmap
 				.groupBy(new Function<String, String>() {
 
@@ -118,7 +119,7 @@ public class Main {
 
 		groupBy.saveAsTextFile("/spark/homework/groupBy");
 
-		// TODO:reduce
+		// TODO:使用reduce找出測試資料所有英文字母，並用reduce將之append成一個字串
 		String reduce = map.reduce(new Function2<String, String, String>() {
 
 			public String call(String arg0, String arg1) throws Exception {
@@ -132,7 +133,7 @@ public class Main {
 		JavaRDD<String> reduceResult = sc.parallelize(list, 1);
 		reduceResult.saveAsTextFile("/spark/homework/reduce");
 
-		// TODO:reduceByKey
+		// TODO:使用reduceByKey找出以”,”切割的所有wordcount，並存至/spark/homework/reduceByKey
 		JavaPairRDD<String, Integer> reduceByKey = mapToPair
 				.reduceByKey(new Function2<Integer, Integer, Integer>() {
 

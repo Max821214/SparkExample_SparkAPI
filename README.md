@@ -1,4 +1,4 @@
-﻿## SparkExample SparkAPI IMAC - BigData Team - 2015/12/16
+## SparkExample SparkAPI IMAC - BigData Team - 2015/12/16
 
 ###問題描述
 利用範例資料測試並使用幾項Spark API
@@ -110,6 +110,7 @@ abcdef
 **
 當中因為reduce輸出為String，需要先加這筆字串加到類別為ArrayList裡，在利用JavaSparkContext中有項parallelize方法將結果轉成JavaRDD輸出
 **
+
 ```java
 	List<String> list = new ArrayList();
 	list.add(reduce);
@@ -131,7 +132,7 @@ abcdef
 ###執行分析
 
 ```
-spark-submit --class com.imac.test.Main.class \
+spark-submit --class com.imac.test.Main \
 --master yarn-cluster HW.jar \
 /spark/homework/test.txt \
 ```
